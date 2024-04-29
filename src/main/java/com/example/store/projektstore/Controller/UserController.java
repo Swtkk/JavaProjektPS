@@ -26,12 +26,7 @@ public class UserController {
         return "Users";  // Nazwa szablonu Thymeleaf
     }
 
-    @ResponseBody
-    @PostMapping("/users")
-    public ResponseEntity<User> createUser(@RequestBody User user) {
-        User createdUser = userService.createUser(user);
-        return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
-    }
+
 }
 
 

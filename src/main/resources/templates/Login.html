@@ -13,7 +13,6 @@
             <form th:action="@{/login}" method="post" th:object="${userForm}">
                 <div class="mb-3 ">
                     <label for="username" class="form-label">Login</label>
-                    <!-- Zmieniono username na login, jeżeli to nazwa pola w klasie User -->
                     <input type="text" class="form-control" id="username" th:field="*{login}" placeholder="Wprowadz Login">
                     <div class="text-danger mt-1" th:if="${#fields.hasErrors('login')}" th:errors="*{login}">Login Error</div>
                 </div>

@@ -22,6 +22,9 @@ public class UserService {
         return userRepository.findById(id);
     }
 
+    public boolean isUserExists(String userLogin){
+       return userRepository.findByLogin(userLogin).isPresent();
+    }
     public User createUser(User newUser){
 
         User user = new User();
