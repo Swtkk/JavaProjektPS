@@ -22,7 +22,7 @@ public class UserController {
     public String getUsers(Model model){
         List<User> users = userService.getAllUsers();
         model.addAttribute("users", users);
-        return "Users";  // Nazwa szablonu Thymeleaf
+        return "Users";
     }
 
 
