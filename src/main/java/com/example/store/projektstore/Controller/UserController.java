@@ -13,7 +13,6 @@ import java.util.List;
 
 
 @Controller   // Zmieniłem @RestController na @Controller, aby obsłużyć widoki Thymeleaf
-@RequestMapping("/api")
 public class UserController {
 
     @Autowired
