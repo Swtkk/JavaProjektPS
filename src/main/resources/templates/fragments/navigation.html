@@ -1,0 +1,32 @@
+<!-- src/main/resources/templates/fragments/navigation.html -->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/">Store Everything</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link" href="/informations" aria-label="Lista informacji">Lista informacji</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/add-information" aria-label="Dodaj informację">Dodaj informację</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="/users" aria-label="Użytkownicy">Użytkownicy</a>
+        </li>
+      </ul>
+      <form class="d-flex" role="search">
+        <a class="btn btn-outline-success" aria-label="Zaloguj sie" href="/login">Zaloguj sie</a>
+        <a class="btn btn-primary ms-2" aria-label="Zarejestruj sie" href="/register">Zarejestruj sie</a>
+      </form>
+    </div>
+  </div>
+</nav>
+</body>
+</html>

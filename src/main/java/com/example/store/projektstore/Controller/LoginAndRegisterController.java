@@ -31,7 +31,7 @@ public class LoginAndRegisterController {
             return "Login";  // Powrót do formularza w przypadku błędów
         }
         // Logika logowania
-        return "redirect:/homepage";  // Przekierowanie po udanym logowaniu
+        return "redirect:/";  // Przekierowanie po udanym logowaniu
     }
 
     @GetMapping("/register")

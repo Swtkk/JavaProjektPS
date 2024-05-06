@@ -60,4 +60,10 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private Set<Role> roles;
+
+    public void addInformation(InformationStore information) {
+        this.informationStoreList.add(information);
+        information.setUser(this);
+    }
+
 }
