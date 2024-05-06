@@ -17,18 +17,24 @@
                 <div class="card h-100">
                     <div class="card-body d-flex flex-column">
                         <h5 class="card-title" th:text="${information.title}">Tytuł</h5>
-                        <p class="card-text mb-auto" style="max-height: 150px; overflow-y: auto;" th:text="${information.description}">Opis</p>
-                        <p class="card-text"><small class="text-muted" th:text="${information.category}">Kategoria</small></p>
-                        <p class="card-text"><small class="text-muted" th:text="${information.dateAdded}">Data dodania</small></p>
+                        <p class="card-text mb-auto" style="max-height: 150px; overflow-y: auto;"
+                           th:text="${information.description}">Opis</p>
+                        <p class="card-text"><small class="text-muted"
+                                                    th:text="${information.category}">Kategoria</small></p>
+                        <p class="card-text"><small class="text-muted" th:text="${information.dateAdded}">Data
+                            dodania</small></p>
                         <div class="mt-auto">
                             <a th:href="@{'/view/' + ${information.id}}" class="btn btn-primary">Zobacz</a>
-                            <a th:href="@{'/edit/' + ${information.id}}" class="btn btn-secondary">Edytuj</a>
+                            <a th:href="@{'/' + ${userLogin} + '/informations/' + ${information.id} + '/edit'}"
+                               class="btn btn-secondary">Edytuj</a>
                             <a th:href="@{'/delete/' + ${information.id}}" class="btn btn-danger">Usuń</a>
                         </div>
                     </div>
 
                     <div class="card-footer">
-                        <small class="text-muted">Link: <a th:href="${information.link}" th:text="${information.link}">Kliknij tutaj</a></small>
+                        <small class="text-muted">
+                            Link: <a th:href="${information.link}" th:text="${information.link}">Kliknij tutaj</a>
+                        </small>
                     </div>
                 </div>
             </div>

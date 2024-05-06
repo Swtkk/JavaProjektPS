@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class InformationController {
@@ -25,6 +26,33 @@ public class InformationController {
     @Autowired
     private InformationService informationService;
 
+    @GetMapping("/{login}/informations/{informationId}/edit")
+    public String getInformation(@PathVariable String login, @PathVariable Long informationId, Model model) {
+        Optional<InformationStore> informationOptional = informationService.getInformationById(informationId);
+        if (!informationOptional.isPresent()) {
+            model.addAttribute("error", "Informacja nie znaleziona.");
+            return "errorPage";  // Możesz stworzyć stronę błędu lub przekierować gdzie indziej
+        }
+        model.addAttribute("information", informationOptional.get());
+        model.addAttribute("login", login);
+        model.addAttribute("informationId", informationId);
+        return "EditInformation";  // Nazwa pliku HTML formularza edycji
+    }
+
+    @PostMapping("/{login}/informations/{informationId}/edit")
+    public String updateInformation(@PathVariable String login, @PathVariable Long informationId,
+                                    @Valid @ModelAttribute("information") InformationStore updatedInformation,
+                                    BindingResult bindingResult, Model model) {
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("login", login);
+            model.addAttribute("informationId", informationId);
+            model.addAttribute("information", updatedInformation);
+            return "EditInformation"; // Zwróć formularz z błędami
+        }
+
+        InformationStore information = informationService.updateInformation(informationId, updatedInformation);
+        return "redirect:/" + login + "/informations";  // Przekierowanie do listy informacji
+    }
 
     @GetMapping("/{login}/informations")
     public String getInformations(@PathVariable String login, Model model) {
@@ -32,6 +60,7 @@ public class InformationController {
 
         List<InformationStore> informationStoreList = user.getInformationStoreList();
         model.addAttribute("informations", informationStoreList);
+        model.addAttribute("userLogin", login);
         return "Informations";
     }
 
