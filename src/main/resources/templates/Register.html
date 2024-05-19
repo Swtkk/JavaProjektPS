@@ -11,27 +11,37 @@
     <form th:action="@{/register}" method="post" th:object="${registerForm}">
         <div class="mb-3">
             <label for="firstName" class="form-label">First Name</label>
-            <input type="text" class="form-control" id="firstName" th:field="*{firstName}" placeholder="Enter first name">
+            <input type="text" class="form-control" id="firstName" th:field="*{firstName}"
+                   th:class="${#fields.hasErrors('firstName')} ? 'form-control is-invalid' : (${formSubmitted} ? 'form-control is-valid' : 'form-control')"
+                   placeholder="Enter first name">
             <div class="text-danger" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></div>
         </div>
         <div class="mb-3">
             <label for="lastName" class="form-label">Last Name</label>
-            <input type="text" class="form-control" id="lastName" th:field="*{lastName}" placeholder="Enter last name">
+            <input type="text" class="form-control" id="lastName" th:field="*{lastName}"
+                   th:class="${#fields.hasErrors('lastName')} ? 'form-control is-invalid' : (${formSubmitted} ? 'form-control is-valid' : 'form-control')"
+                   placeholder="Enter last name">
             <div class="text-danger" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></div>
         </div>
         <div class="mb-3">
             <label for="login" class="form-label">Login</label>
-            <input type="text" class="form-control" id="login" th:field="*{login}" placeholder="Enter login">
+            <input type="text" class="form-control" id="login" th:field="*{login}"
+                   th:class="${#fields.hasErrors('login')} ? 'form-control is-invalid' : (${formSubmitted} ? 'form-control is-valid' : 'form-control')"
+                   placeholder="Enter login">
             <div class="text-danger" th:if="${#fields.hasErrors('login')}" th:errors="*{login}"></div>
         </div>
         <div class="mb-3">
             <label for="password" class="form-label">Password</label>
-            <input type="password" class="form-control" id="password" th:field="*{password}" placeholder="Password">
+            <input type="text" class="form-control" id="password" th:field="*{password}"
+                   th:class="${#fields.hasErrors('password')} ? 'form-control is-invalid' : (${formSubmitted} ? 'form-control is-valid' : 'form-control')"
+                   placeholder="Enter password">
             <div class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
         </div>
         <div class="mb-3">
             <label for="age" class="form-label">Age</label>
-            <input type="number" class="form-control" id="age" th:field="*{age}" placeholder="Enter age">
+            <input type="text" class="form-control" id="age" th:field="*{age}"
+                   th:class="${#fields.hasErrors('age')} ? 'form-control is-invalid' : (${formSubmitted} ? 'form-control is-valid' : 'form-control')"
+                   placeholder="Enter age">
             <div class="text-danger" th:if="${#fields.hasErrors('age')}" th:errors="*{age}"></div>
         </div>
         <button type="submit" class="btn btn-primary">Register</button>

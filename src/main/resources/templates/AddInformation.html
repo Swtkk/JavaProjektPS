@@ -13,7 +13,7 @@
     <div th:if="${successMessage}" class="alert alert-success" role="alert">
         <p th:text="${successMessage}"></p>
     </div>
-    <form th:action="@{'/' + ${login} + '/add-information'}" method="post" th:object="${information}">
+    <form th:action="@{/add-information}" method="post" th:object="${information}">
         <div class="mb-3">
             <label for="title" class="form-label">Tytuł</label>
             <input type="text" class="form-control" id="title" th:field="*{title}" placeholder="Wprowadź tytuł"
@@ -35,16 +35,18 @@
         </div>
 
         <div class="mb-3">
-            <label for="category" class="form-label">Kategoria</label>
-            <input type="text" class="form-control" id="category" th:field="*{category}"
-                   placeholder="Wprowadź kategorię">
+            <label for="categoryId" class="form-label">Kategoria</label>
+            <select class="form-select" id="categoryId" th:field="*{category.id}" required>
+                <option value="" disabled selected>Wybierz kategorię</option>
+                <option th:each="category : ${categories}" th:value="${category.id}"
+                        th:text="${category.name}"></option>
+            </select>
             <div class="text-danger" th:if="${#fields.hasErrors('category')}" th:errors="*{category}"></div>
         </div>
 
         <button type="submit" class="btn btn-primary">Dodaj Informację</button>
     </form>
 </div>
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

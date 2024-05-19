@@ -10,7 +10,7 @@
 <div th:replace="~{fragments/navigation :: navbar}"></div>
 <div class="container mt-5 p-2">
     <h1 class="mb-4">Edytuj Informację</h1>
-    <form th:action="@{'/' + ${login} + '/informations/' + ${informationId} + '/edit'}" method="post"
+    <form th:action="@{'/informations/' + ${informationId} + '/edit'}" method="post"
           th:object="${information}">
         <div class="mb-3">
             <label for="title" class="form-label">Tytuł</label>
@@ -34,13 +34,15 @@
 
         <div class="mb-3">
             <label for="category" class="form-label">Kategoria</label>
-            <input type="text" class="form-control" id="category" th:field="*{category}"
-                   placeholder="Wprowadź kategorię" required>
+            <select class="form-select" id="category" th:field="*{category.id}" required>
+                <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"
+                        th:selected="${category.id == information.category.id}"></option>
+            </select>
             <div class="text-danger" th:if="${#fields.hasErrors('category')}" th:errors="*{category}"></div>
         </div>
 
         <button type="submit" class="btn btn-primary">Zapisz zmiany</button>
-        <a th:href="@{'/' + ${login} + '/informations'}" class="btn btn-secondary">Anuluj</a>
+        <a th:href="@{'/informations'}" class="btn btn-secondary">Anuluj</a>
     </form>
 </div>
 

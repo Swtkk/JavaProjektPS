@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="pl">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
 <head>
     <title>Strona Główna</title>
     <meta charset="utf-8">
@@ -12,10 +13,13 @@
 
 <div class="container mt-4">
     <header>
-        <h1 class="text-center mb-4">Witaj na stronie głównej</h1>
+        <h1 sec:authorize="" class="text-center mb-4">Witaj na stronie głównej</h1>
     </header>
+
     <main>
-        <p> Tu jest treść główna</p>
+        <div sec:authorize="isAuthenticated()">To widzi zalogowany uzytkownik </div>
+        <div sec:authorize="hasAuthority('full_user')">To widzi uzytkownik zarejestrowany</div>
+        <div sec:authorize="hasAuthority('admin')">To widzi admin</div>
     </main>
 </div>
 
