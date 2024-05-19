@@ -50,7 +50,7 @@ public class SecuritConfig {
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .defaultSuccessUrl("/", true) // Strona domowa po pomyślnym logowaniu
+                        .defaultSuccessUrl("/", true)
                         .usernameParameter("login")
                         .passwordParameter("password")
                         .permitAll()

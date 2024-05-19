@@ -1,6 +1,7 @@
 package com.example.store.projektstore.Service;
 
-import com.example.store.projektstore.DTO.UserDTO;
+//import com.example.store.projektstore.DTO.UserDTO;
+
 import com.example.store.projektstore.Model.Role;
 import com.example.store.projektstore.Model.User;
 import com.example.store.projektstore.Repository.RoleRepository;
@@ -40,8 +41,12 @@ public class UserService {
         return userRepository.findByLogin(userLogin).isPresent();
     }
 
-    public UserDTO createUser(UserDTO userDTO) {
+    public User createUser(User userDTO) {
         Optional<Role> userRole = roleRepository.findByName("limited_user");
+
+        if (userRole.isEmpty()) {
+            throw new RuntimeException("Role not found");
+        }
 
         User user = new User();
         user.setFirstName(userDTO.getFirstName());
@@ -52,15 +57,7 @@ public class UserService {
         user.setRoles(Collections.singleton(userRole.get()));
 
         User newUser = userRepository.save(user);
-
-        UserDTO userResponse = new UserDTO();
-        userResponse.setId(newUser.getId());
-        userResponse.setFirstName(newUser.getFirstName());
-        userResponse.setLastName(newUser.getLastName());
-        userResponse.setLogin(newUser.getLogin());
-        userResponse.setPassword(newUser.getPassword());
-        userResponse.setAge(newUser.getAge());
-        userResponse.setRoles(newUser.getRoles());
-        return userResponse;
+        return newUser;
     }
+
 }

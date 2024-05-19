@@ -1,6 +1,7 @@
 package com.example.store.projektstore.Controller;
 
-import com.example.store.projektstore.DTO.UserDTO;
+//import com.example.store.projektstore.DTO.UserDTO;
+
 import com.example.store.projektstore.Model.User;
 //import com.example.store.projektstore.Repository.RoleRepository;
 import com.example.store.projektstore.Repository.RoleRepository;
@@ -23,14 +24,20 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class LoginAndRegisterController {
 
-    @Autowired
+    private final
     UserService userService;
 
-    @Autowired
+    private final
     PasswordEncoder passwordEncoder;
 
-    @Autowired
+    private final
     RoleRepository roleRepository;
+
+    public LoginAndRegisterController(UserService userService, PasswordEncoder passwordEncoder, RoleRepository roleRepository) {
+        this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
+        this.roleRepository = roleRepository;
+    }
 
 
     @GetMapping("/login")
@@ -73,16 +80,21 @@ public class LoginAndRegisterController {
             model.addAttribute("registerForm", user); // przekazywanie modelu z powrotem z błędami
             return "Register";
         }
-        UserDTO newUser = new UserDTO();
-        newUser.setFirstName(user.getFirstName());
-        newUser.setLastName(user.getLastName());
-        newUser.setAge(user.getAge());
-        newUser.setLogin(user.getLogin());
-        newUser.setPassword(passwordEncoder.encode(user.getPassword()));
+//        User newUser = new User();
+//        newUser.setFirstName(user.getFirstName());
+//        newUser.setLastName(user.getLastName());
+//        newUser.setAge(user.getAge());
+//        newUser.setLogin(user.getLogin());
+//        newUser.setPassword(passwordEncoder.encode(user.getPassword()));
 
+        System.out.println("Registering user: " + user);
 
-        userService.createUser(newUser);
+        userService.createUser(user);
+
+        System.out.println("User registered: " + user);
+
         return "redirect:/success";
     }
+
 
 }
