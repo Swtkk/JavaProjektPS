@@ -3,6 +3,10 @@ package com.example.store.projektstore.Service;
 import com.example.store.projektstore.Model.InformationStore;
 import com.example.store.projektstore.Repository.InformationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -11,8 +15,34 @@ import java.util.Optional;
 @Service
 public class InformationService {
 
+    private final InformationRepository informationRepository;
+
     @Autowired
-    InformationRepository informationRepository;
+    public InformationService(InformationRepository informationRepository) {
+        this.informationRepository = informationRepository;
+    }
+
+    public Page<InformationStore> findPaginatedByUserLogin(String login, int page, int size, String sortBy, Sort.Direction sortDir, String filterCategory) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(sortDir, sortBy));
+        if (filterCategory.isEmpty()) {
+            return informationRepository.findByUserLogin(login, pageable);
+        } else {
+            return informationRepository.findByUserLoginAndCategoryName(login, filterCategory, pageable);
+        }
+    }
+
+    public Page<InformationStore> findAllOrderByCategoryCount(String login, int page, int size, Sort.Direction sortDir) {
+        Pageable pageable = PageRequest.of(page, size);
+        if (sortDir == Sort.Direction.ASC) {
+            return informationRepository.findAllOrderByCategoryCountAsc(login, pageable);
+        } else {
+            return informationRepository.findAllOrderByCategoryCountDesc(login, pageable);
+        }
+    }
+
+    public void deleteInformation(Long informationId) {
+        informationRepository.deleteById(informationId);
+    }
 
     public InformationStore saveInformation(InformationStore information) {
         return informationRepository.save(information);
