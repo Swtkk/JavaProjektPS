@@ -3,6 +3,7 @@ package com.example.store.projektstore.Controller;
 //import com.example.store.projektstore.DTO.UserDTO;
 
 import com.example.store.projektstore.DTO.UserDTO;
+import com.example.store.projektstore.Model.Role;
 import com.example.store.projektstore.Model.User;
 //import com.example.store.projektstore.Repository.RoleRepository;
 import com.example.store.projektstore.Repository.RoleRepository;
@@ -21,6 +22,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import java.util.Collections;
+import java.util.Optional;
 
 @Controller
 public class LoginAndRegisterController {
@@ -74,6 +78,7 @@ public class LoginAndRegisterController {
     @PostMapping("/register")
     public String registerUser(@Valid @ModelAttribute("registerForm") UserDTO user, BindingResult bindingResult, Model model) {
         model.addAttribute("formSubmitted", true);
+        Optional<Role> userRole = roleRepository.findByName("limited_user");
         if (userService.isUserExists(user.getLogin())) {
             bindingResult.rejectValue("login", "user.login", "Login jest juz zajety");
         }
@@ -81,7 +86,7 @@ public class LoginAndRegisterController {
             model.addAttribute("registerForm", user); // przekazywanie modelu z powrotem z błędami
             return "Register";
         }
-
+        user.setRoles(Collections.singleton(userRole.get()));
 //        User newUser = new User();
 //        UserDTO newUser = new UserDTO();
 //        newUser.setFirstName(user.getFirstName());
@@ -90,8 +95,6 @@ public class LoginAndRegisterController {
 //        newUser.setLogin(user.getLogin());
 //        newUser.setPassword(passwordEncoder.encode(user.getPassword()));
 //        newUser.setPassword(user.getPassword());
-
-
 
 
         userService.createUser(user);
