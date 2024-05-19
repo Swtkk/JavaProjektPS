@@ -64,7 +64,7 @@ public class LoginAndRegisterController {
 
 
     @PostMapping("/register")
-    public String registerUser(@Valid @ModelAttribute("registerForm") User user, BindingResult bindingResult, Model model) {
+    public String registerUser(@Valid @ModelAttribute("registerForm") UserDTO user, BindingResult bindingResult, Model model) {
         model.addAttribute("formSubmitted", true);
         if (userService.isUserExists(user.getLogin())) {
             bindingResult.rejectValue("login", "user.login", "Login jest juz zajety");
@@ -73,15 +73,15 @@ public class LoginAndRegisterController {
             model.addAttribute("registerForm", user); // przekazywanie modelu z powrotem z błędami
             return "Register";
         }
-        UserDTO newUser = new UserDTO();
-        newUser.setFirstName(user.getFirstName());
-        newUser.setLastName(user.getLastName());
-        newUser.setAge(user.getAge());
-        newUser.setLogin(user.getLogin());
-        newUser.setPassword(passwordEncoder.encode(user.getPassword()));
+//        UserDTO newUser = new UserDTO();
+//        newUser.setFirstName(user.getFirstName());
+//        newUser.setLastName(user.getLastName());
+//        newUser.setAge(user.getAge());
+//        newUser.setLogin(user.getLogin());
+//        newUser.setPassword(user.getPassword());
 
 
-        userService.createUser(newUser);
+        userService.createUser(user);
         return "redirect:/success";
     }
 
