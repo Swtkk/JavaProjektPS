@@ -4,6 +4,7 @@ import com.example.store.projektstore.Model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -11,6 +12,8 @@ import java.util.Optional;
 public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByLogin(String login);
-//    Optional<UserEntity> findByUsername (String username);
+
+    //    Optional<UserEntity> findByUsername (String username);
+    List<User> findByRolesName(String roleName);
 
 }

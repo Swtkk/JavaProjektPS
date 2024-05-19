@@ -2,12 +2,12 @@ package com.example.store.projektstore.Service;
 
 //import com.example.store.projektstore.DTO.UserDTO;
 
+import com.example.store.projektstore.DTO.UserDTO;
 import com.example.store.projektstore.Model.Role;
 import com.example.store.projektstore.Model.User;
 import com.example.store.projektstore.Repository.RoleRepository;
 import com.example.store.projektstore.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -33,6 +33,23 @@ public class UserService {
         return userRepository.findById(id);
     }
 
+    public List<User> findAllUsers() {
+        return userRepository.findAll();
+    }
+
+    public List<User> findUsersWithRole(String roleName) {
+        return userRepository.findByRolesName(roleName);
+    }
+
+    public User findById(Long id) {
+        return userRepository.findById(id).orElse(null);
+    }
+
+
+    public User save(User user) {
+        return userRepository.save(user);
+    }
+
     public User findByLogin(String login) {
         return userRepository.findByLogin(login).orElse(null);
     }
@@ -41,12 +58,8 @@ public class UserService {
         return userRepository.findByLogin(userLogin).isPresent();
     }
 
-    public User createUser(User userDTO) {
+    public UserDTO createUser(UserDTO userDTO) {
         Optional<Role> userRole = roleRepository.findByName("limited_user");
-
-        if (userRole.isEmpty()) {
-            throw new RuntimeException("Role not found");
-        }
 
         User user = new User();
         user.setFirstName(userDTO.getFirstName());
@@ -57,7 +70,16 @@ public class UserService {
         user.setRoles(Collections.singleton(userRole.get()));
 
         User newUser = userRepository.save(user);
-        return newUser;
+
+        UserDTO userResponse = new UserDTO();
+        userResponse.setId(newUser.getId());
+        userResponse.setFirstName(newUser.getFirstName());
+        userResponse.setLastName(newUser.getLastName());
+        userResponse.setLogin(newUser.getLogin());
+        userResponse.setPassword(newUser.getPassword());
+        userResponse.setAge(newUser.getAge());
+        userResponse.setRoles(newUser.getRoles());
+        return userResponse;
     }
 
 }
