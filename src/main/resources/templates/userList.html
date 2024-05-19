@@ -15,7 +15,7 @@
         <h1 class="mb-4">Lista Użytkowników</h1>
         <div class="table-responsive">
             <table class="table table-striped" aria-describedby="usersDescription">
-                <caption id="usersDescription">Tabela zawierająca listę użytkowników wraz z ich danymi.</caption>
+                <caption id="usersDescription">Tabela zawierająca listę użytkowników z rolą limited_user.</caption>
                 <thead>
                 <tr>
                     <th scope="col">Id</th>
@@ -29,12 +29,14 @@
                 <tbody>
                 <tr th:each="user : ${users}">
                     <td th:text="${user.id}"></td>
-                    <td th:text="${user.firstName} + ' ' + ${user.lastName}"></td>
+                    <td th:text="${user.firstName + ' ' + user.lastName}"></td>
                     <td th:text="${user.age}"></td>
                     <td th:text="${user.login}"></td>
-                    <td th:text="${user.getAuthorities()}"></td>
+                    <td th:text="${user.roles.iterator().next().name}"></td>
                     <td>
-                        <button class="btn btn-success">Zatwierdź</button>
+                        <form th:action="@{'/users/' + ${user.id} + '/approve'}" method="post">
+                            <button type="submit" class="btn btn-success">Zatwierdź</button>
+                        </form>
                     </td>
                 </tr>
                 </tbody>

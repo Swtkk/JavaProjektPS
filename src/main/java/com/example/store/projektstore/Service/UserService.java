@@ -6,7 +6,6 @@ import com.example.store.projektstore.Model.User;
 import com.example.store.projektstore.Repository.RoleRepository;
 import com.example.store.projektstore.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +29,22 @@ public class UserService {
 
     public Optional<User> getUser(Long id) {
         return userRepository.findById(id);
+    }
+
+    public List<User> findAllUsers() {
+        return userRepository.findAll();
+    }
+    public List<User> findUsersWithRole(String roleName) {
+        return userRepository.findByRolesName(roleName);
+    }
+
+    public User findById(Long id) {
+        return userRepository.findById(id).orElse(null);
+    }
+
+
+    public User save(User user) {
+        return userRepository.save(user);
     }
 
     public User findByLogin(String login) {
