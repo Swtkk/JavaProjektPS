@@ -75,6 +75,14 @@
                             Link: <a th:href="${information.link}" th:text="${information.link}">Kliknij tutaj</a>
                         </small>
                     </div>
+                    <div class="card-footer">
+                        <form th:action="@{'/informations/' + ${information.id} + '/send'}" method="post">
+                            <div class="input-group">
+                                <input type="text" name="login" class="form-control" placeholder="Login użytkownika">
+                                <button type="submit" class="btn btn-primary">Wyślij do użytkownika</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>

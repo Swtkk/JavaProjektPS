@@ -45,7 +45,13 @@ public class InformationController {
             return "errorPage";
         }
     }
-
+    @PostMapping("/informations/{id}/send")
+    public String sendInformationToUser(@PathVariable Long id, @RequestParam String login) {
+        Optional<InformationStore> information = informationService.getInformationById(id);
+        InformationStore informationStore = information.get();
+        userService.sendInformationToUser(informationStore, login);
+        return "redirect:/informations";
+    }
     @GetMapping("/informations/{informationId}/edit")
     public String getInformation(@PathVariable Long informationId, Model model, @AuthenticationPrincipal UserDetails currentUser) {
         Optional<InformationStore> informationOptional = informationService.getInformationById(informationId);

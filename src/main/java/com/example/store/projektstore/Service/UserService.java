@@ -3,6 +3,7 @@ package com.example.store.projektstore.Service;
 //import com.example.store.projektstore.DTO.UserDTO;
 
 import com.example.store.projektstore.DTO.UserDTO;
+import com.example.store.projektstore.Model.InformationStore;
 import com.example.store.projektstore.Model.Role;
 import com.example.store.projektstore.Model.User;
 import com.example.store.projektstore.Repository.RoleRepository;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -56,6 +58,23 @@ public class UserService {
 
     public boolean isUserExists(String userLogin) {
         return userRepository.findByLogin(userLogin).isPresent();
+    }
+    public void sendInformationToUser(InformationStore information, String login) {
+        Optional<User> user = userRepository.findByLogin(login);
+        User user1 = user.get();
+        if (user != null) {
+            // Logika wysyłania informacji do użytkownika, np. dodanie do listy informacji użytkownika
+            InformationStore newInformation = new InformationStore();
+            newInformation.setUser(user.get());
+            newInformation.setTitle(information.getTitle());
+            newInformation.setDescription(information.getDescription());
+            newInformation.setLink(information.getLink());
+            newInformation.setCategory(information.getCategory());
+            newInformation.setDateAdded(LocalDate.now());
+
+            user1.getInformationStoreList().add(newInformation);
+            userRepository.save(user1);
+        }
     }
 
     public UserDTO createUser(UserDTO userDTO) {

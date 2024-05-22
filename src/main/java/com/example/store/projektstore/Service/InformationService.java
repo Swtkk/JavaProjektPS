@@ -17,27 +17,31 @@ public class InformationService {
 
     private final InformationRepository informationRepository;
 
-    @Autowired
     public InformationService(InformationRepository informationRepository) {
         this.informationRepository = informationRepository;
     }
 
+
     public Page<InformationStore> findPaginatedByUserLogin(String login, int page, int size, String sortBy, Sort.Direction sortDir, String filterCategory) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortDir, sortBy));
-        if (filterCategory.isEmpty()) {
-            return informationRepository.findByUserLogin(login, pageable);
-        } else {
-            return informationRepository.findByUserLoginAndCategoryName(login, filterCategory, pageable);
-        }
+//        if (filterCategory.isEmpty()) {
+//            return informationRepository.findByUserLogin(login, pageable);
+//        } else {
+//            return informationRepository.findByUserLoginAndCategoryName(login, filterCategory, pageable);
+//        }
+        return filterCategory.isEmpty() ? informationRepository.findByUserLogin(login, pageable)
+                : informationRepository.findByUserLoginAndCategoryName(login, filterCategory, pageable);
     }
 
     public Page<InformationStore> findAllOrderByCategoryCount(String login, int page, int size, Sort.Direction sortDir) {
         Pageable pageable = PageRequest.of(page, size);
-        if (sortDir == Sort.Direction.ASC) {
-            return informationRepository.findAllOrderByCategoryCountAsc(login, pageable);
-        } else {
-            return informationRepository.findAllOrderByCategoryCountDesc(login, pageable);
-        }
+//        if (sortDir == Sort.Direction.ASC) {
+//            return informationRepository.findAllOrderByCategoryCountAsc(login, pageable);
+//        } else {
+//            return informationRepository.findAllOrderByCategoryCountDesc(login, pageable);
+//        }
+        return  sortDir == Sort.Direction.ASC ? informationRepository.findAllOrderByCategoryCountAsc(login, pageable)
+                : informationRepository.findAllOrderByCategoryCountDesc(login, pageable);
     }
 
     public void deleteInformation(Long informationId) {
