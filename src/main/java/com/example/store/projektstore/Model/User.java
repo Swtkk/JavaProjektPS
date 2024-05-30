@@ -105,6 +105,8 @@ public class User implements UserDetails {
         this.informationStoreList.add(information);
         information.setUser(this);
     }
+    @OneToMany(mappedBy = "sender", cascade = CascadeType.ALL)
+    private List<InformationStore> sentInformations;
 
     @Override
     public String toString() {

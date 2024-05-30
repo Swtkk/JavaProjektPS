@@ -46,6 +46,7 @@ public class SecuritConfig {
                 .authorizeHttpRequests(req -> req
                         .requestMatchers("/", "/login", "/register").permitAll() // Umożliwia dostęp do tych endpointów dla wszystkich
                         .requestMatchers("/users").hasAuthority("admin") // Tylko admini mają dostęp do /users
+                        .requestMatchers("/categories/**", "/categories", "/add-information", "/informations", "/informations/**").hasAnyAuthority("admin", "full_user")
                         .anyRequest().authenticated() // Wszystkie inne żądania wymagają autentykacji
                 )
                 .formLogin(form -> form

@@ -75,21 +75,30 @@
                             Link: <a th:href="${information.link}" th:text="${information.link}">Kliknij tutaj</a>
                         </small>
                     </div>
+                    <div class="card-footer"
+                         th:if="${information.sender != null and information.sender.login != userLogin}">
+                        <small class="text-muted">Nadawca: <span
+                                th:text="${information.sender.login}">Nadawca</span></small>
+                    </div>
+
                     <div class="card-footer">
                         <form th:action="@{'/informations/' + ${information.id} + '/send'}" method="post">
                             <div class="input-group">
-                                <input type="text" name="login" class="form-control" placeholder="Login użytkownika">
+                                <input type="text" name="login" class="form-control" placeholder="Login użytkownika"
+                                       required>
+                                <input type="hidden" name="senderLogin" th:value="${userLogin}">
                                 <button type="submit" class="btn btn-primary">Wyślij do użytkownika</button>
                             </div>
                         </form>
                     </div>
+
                 </div>
             </div>
         </div>
     </main>
 </div>
 
-<div class="pagination-container fixed-bottom">
+<div class="pagination-container fixed-bottom" th:if="${not informationsPage.isEmpty()}">
     <div class="container">
         <ul class="pagination justify-content-center my-2">
             <li th:classappend="${informationsPage.first} ? 'disabled' : ''" class="page-item">

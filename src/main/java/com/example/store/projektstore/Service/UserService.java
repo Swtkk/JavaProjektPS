@@ -59,21 +59,41 @@ public class UserService {
     public boolean isUserExists(String userLogin) {
         return userRepository.findByLogin(userLogin).isPresent();
     }
-    public void sendInformationToUser(InformationStore information, String login) {
-        Optional<User> user = userRepository.findByLogin(login);
-        User user1 = user.get();
-        if (user != null) {
-            // Logika wysyłania informacji do użytkownika, np. dodanie do listy informacji użytkownika
+
+    //    public void sendInformationToUser(InformationStore information, String login) {
+//        Optional<User> user = userRepository.findByLogin(login);
+//        User user1 = user.get();
+//        if (user != null) {
+//            // Logika wysyłania informacji do użytkownika, np. dodanie do listy informacji użytkownika
+//            InformationStore newInformation = new InformationStore();
+//            newInformation.setUser(user.get());
+//            newInformation.setTitle(information.getTitle());
+//            newInformation.setDescription(information.getDescription());
+//            newInformation.setLink(information.getLink());
+//            newInformation.setCategory(information.getCategory());
+//            newInformation.setDateAdded(LocalDate.now());
+//
+//            user1.getInformationStoreList().add(newInformation);
+//            userRepository.save(user1);
+//        }
+//    }
+    public void sendInformationToUser(InformationStore information, String recipientLogin, String senderLogin) {
+        Optional<User> recipient = userRepository.findByLogin(recipientLogin);
+        Optional<User> sender = userRepository.findByLogin(senderLogin);
+        User rec = recipient.get();
+        User senderUser = sender.get();
+        if (recipient != null && sender != null) {
             InformationStore newInformation = new InformationStore();
-            newInformation.setUser(user.get());
+            newInformation.setUser(rec);
             newInformation.setTitle(information.getTitle());
             newInformation.setDescription(information.getDescription());
             newInformation.setLink(information.getLink());
             newInformation.setCategory(information.getCategory());
             newInformation.setDateAdded(LocalDate.now());
+            newInformation.setSender(senderUser);  // Ustawienie nadawcy
 
-            user1.getInformationStoreList().add(newInformation);
-            userRepository.save(user1);
+            rec.getInformationStoreList().add(newInformation);
+            userRepository.save(rec);
         }
     }
 

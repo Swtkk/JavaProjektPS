@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -21,4 +22,6 @@ public interface InformationRepository extends JpaRepository<InformationStore, L
 
     @Query("SELECT i FROM InformationStore i WHERE i.user.login = :login ORDER BY (SELECT COUNT(ic) FROM InformationStore ic WHERE ic.category = i.category) ASC")
     Page<InformationStore> findAllOrderByCategoryCountAsc(String login, Pageable pageable);
+
+    List<InformationStore> findBySenderLogin(String senderLogin);
 }

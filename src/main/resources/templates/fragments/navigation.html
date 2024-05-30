@@ -25,9 +25,11 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/categories/create" aria-label="Twórz kategorie">Twórz kategorie</a>
                 </li>
-                <li class="nav-item">
+                <li sec:authorize="hasAuthority('admin')" class="nav-item">
                     <a class="nav-link" href="/users" aria-label="Użytkownicy">Użytkownicy</a>
                 </li>
+
+
             </ul>
             <!-- Conditionally render login and registration links -->
             <div sec:authorize="!isAuthenticated()">

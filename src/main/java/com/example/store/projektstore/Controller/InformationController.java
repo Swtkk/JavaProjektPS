@@ -8,6 +8,7 @@ import com.example.store.projektstore.Service.InformationService;
 import com.example.store.projektstore.Service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,11 +19,13 @@ import org.springframework.web.bind.annotation.*;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
-@SessionAttributes({"sortBy", "sortDir", "filterCategory"})
 public class InformationController {
 
     private final UserService userService;
@@ -45,13 +48,24 @@ public class InformationController {
             return "errorPage";
         }
     }
+
     @PostMapping("/informations/{id}/send")
-    public String sendInformationToUser(@PathVariable Long id, @RequestParam String login) {
+    public String sendInformationToUser(@PathVariable Long id,
+                                        RedirectAttributes redirectAttributes
+            , @RequestParam @ModelAttribute("senderLogin") String login, @RequestParam String senderLogin) {
         Optional<InformationStore> information = informationService.getInformationById(id);
-        InformationStore informationStore = information.get();
-        userService.sendInformationToUser(informationStore, login);
+        InformationStore inf = information.get();
+        if (information.isPresent()) {
+            inf.setSender(inf.getUser());
+            redirectAttributes.addFlashAttribute("message", "Informacja wysłana do użytkownika " + login);
+            userService.sendInformationToUser(inf, login, senderLogin);
+        } else {
+            redirectAttributes.addFlashAttribute("error", "Nie znaleziono informacji");
+        }
+
         return "redirect:/informations";
     }
+
     @GetMapping("/informations/{informationId}/edit")
     public String getInformation(@PathVariable Long informationId, Model model, @AuthenticationPrincipal UserDetails currentUser) {
         Optional<InformationStore> informationOptional = informationService.getInformationById(informationId);
@@ -76,20 +90,6 @@ public class InformationController {
         return "redirect:/informations";
     }
 
-    @ModelAttribute("sortBy")
-    public String sortBy() {
-        return "dateAdded";
-    }
-
-    @ModelAttribute("sortDir")
-    public String sortDir() {
-        return "desc";
-    }
-
-    @ModelAttribute("filterCategory")
-    public String filterCategory() {
-        return "";
-    }
 
     @GetMapping("/informations")
     public String getInformations(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "dateAdded") String sortBy, @RequestParam(defaultValue = "desc") String sortDir, @RequestParam(defaultValue = "") String filterCategory, Model model, HttpSession session, @AuthenticationPrincipal UserDetails currentUser) {
@@ -101,9 +101,9 @@ public class InformationController {
         Page<InformationStore> paginatedInformation;
         Sort.Direction direction = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.Direction.ASC : Sort.Direction.DESC;
         if ("categoryCount".equals(sortBy)) {
-            paginatedInformation = informationService.findAllOrderByCategoryCount(user.getLogin(), page, 3, direction);
+            paginatedInformation = informationService.findAllOrderByCategoryCount(user.getLogin(), page, 9, direction);
         } else {
-            paginatedInformation = informationService.findPaginatedByUserLogin(user.getLogin(), page, 3, sortBy, direction, filterCategory);
+            paginatedInformation = informationService.findPaginatedByUserLogin(user.getLogin(), page, 9, sortBy, direction, filterCategory);
         }
 
         model.addAttribute("informationsPage", paginatedInformation);
@@ -134,6 +134,14 @@ public class InformationController {
         information.setCategory(category);
         information.setUser(user);
         informationService.saveInformation(information);
+
+        Page<InformationStore> paginated = informationService.findPaginatedByUserLogin(user.getLogin(), 0, 9, "dateAdded", Sort.Direction.DESC, "");
+        List<InformationStore> currentInformationList = new ArrayList<>(paginated.getContent());
+
+        currentInformationList.add(0, information);
+
+        model.addAttribute("informationsPage", new PageImpl<>(currentInformationList));
+
         model.addAttribute("successMessage", "Pomyślnie dodano informację.");
         model.addAttribute("information", new InformationStore());
         model.addAttribute("categories", categoryService.findAllByUserLogin(user.getLogin()));
