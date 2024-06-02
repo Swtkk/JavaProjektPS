@@ -33,7 +33,7 @@ public class InformationService {
     public Page<InformationStore> findAllOrderByCategoryCount(String login, int page, int size, Sort.Direction sortDir) {
         Pageable pageable = PageRequest.of(page, size);
 
-        return  sortDir == Sort.Direction.ASC ? informationRepository.findAllOrderByCategoryCountAsc(login, pageable)
+        return sortDir == Sort.Direction.ASC ? informationRepository.findAllOrderByCategoryCountAsc(login, pageable)
                 : informationRepository.findAllOrderByCategoryCountDesc(login, pageable);
     }
 
@@ -68,7 +68,12 @@ public class InformationService {
     }
 
     public List<InformationStore> findReceivedInformations(String login) {
-            return informationRepository.findBySenderLogin(login);
+        return informationRepository.findBySenderLogin(login);
 
+    }
+
+    public boolean hasOldInformations(String username) {
+        List<InformationStore> informations = informationRepository.findByUserLoginAndDateAddedBefore(username, LocalDate.now().minusDays(3));
+        return !informations.isEmpty();
     }
 }

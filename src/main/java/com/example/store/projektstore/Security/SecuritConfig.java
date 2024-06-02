@@ -3,13 +3,7 @@ package com.example.store.projektstore.Security;
 //import com.example.store.projektstore.Service.CustomUserDetailsService;
 
 import com.example.store.projektstore.Service.CustomUserDetailsService;
-import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
-import jakarta.servlet.ServletRequest;
-import jakarta.servlet.ServletResponse;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.store.projektstore.Service.InformationService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -24,18 +18,17 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.web.filter.GenericFilterBean;
-
-import java.io.IOException;
 
 
 @Configuration
 @EnableWebSecurity
 public class SecuritConfig {
     private final CustomUserDetailsService usersDetailsService;
+    private final InformationService informationService;
 
-    public SecuritConfig(CustomUserDetailsService usersDetailsService) {
+    public SecuritConfig(CustomUserDetailsService usersDetailsService, InformationService informationService) {
         this.usersDetailsService = usersDetailsService;
+        this.informationService = informationService;
     }
 
 
@@ -51,7 +44,14 @@ public class SecuritConfig {
                 )
                 .formLogin(form -> form
                         .loginPage("/login")
-                        .defaultSuccessUrl("/", true)
+                        .successHandler(((request, response, authentication) -> {
+                            String username = authentication.getName();
+                            if (informationService.hasOldInformations(username)) {
+                                response.sendRedirect("/reminders");
+                            } else {
+                                response.sendRedirect("/");
+                            }
+                        }))
                         .usernameParameter("login")
                         .passwordParameter("password")
                         .permitAll()

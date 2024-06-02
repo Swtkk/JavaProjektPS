@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,4 +25,6 @@ public interface InformationRepository extends JpaRepository<InformationStore, L
     Page<InformationStore> findAllOrderByCategoryCountAsc(String login, Pageable pageable);
 
     List<InformationStore> findBySenderLogin(String senderLogin);
+
+    List<InformationStore> findByUserLoginAndDateAddedBefore(String username, LocalDate localDate);
 }

@@ -39,6 +39,13 @@ public class InformationController {
         this.categoryService = categoryService;
     }
 
+    @GetMapping("/reminders")
+    public String showReminders(Model model, @AuthenticationPrincipal UserDetails currentUser) {
+        User user = userService.findByLogin(currentUser.getUsername());
+        List<InformationStore> oldInformations = informationService.findReceivedInformations(user.getLogin());
+        model.addAttribute("oldInformations", oldInformations);
+        return "reminders";
+    }
     @PostMapping("/informations/{informationId}")
     public String deleteInformation(@PathVariable Long informationId) {
         try {
